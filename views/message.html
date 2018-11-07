@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{# You could extend data.outerLayout here, or not. #}
+{# This default version does not so it works with all sites. #}
+
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <title>{{ data.title or __("Under Maintenance") }}</title>
+  <style type="text/css">
+    body {
+      background-color: #cfc;
+    }
+    main {
+      margin: auto;
+      margin-top: 100px;
+      width: 600px;
+      border-radius: 12px;
+      background-color: #efe;
+      padding: 20px;
+      font-family: Helvetica;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>{{ data.title or __("Under Maintenance") }}</h1>
+    <p>{{ data.message or __("The site is under maintenance at the moment and will be back soon.") }}</p>
+  </main>
+</body>
+</html>
