@@ -26,6 +26,10 @@ Logged-out site visitors and editors who do not have the full `admin` permission
 
 The `/login` URL still works normally. Log in as an account with the `admin` permission and disable maintenance mode via the same dropdown you used to turn it on.
 
+## Turn on maintenance mode for certain pages?
+
+Add a list of pages '/about' this will only add the maintence mode for any page that their url contains the listed url
+
 ## Workflow
 
 When this module is used together with [apostrophe-workflow](https://npmjs.org/package/apostrophe-workflow), a special rule applies: **the "Maintenance Mode" setting automatically commits itself across all locales.** That is, *the whole site goes into maintenance mode at once, across all languages.* 
