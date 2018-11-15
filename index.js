@@ -6,52 +6,47 @@ module.exports = {
     directory: './lib/modules'
   },
   construct: function(self, options) {
-
+    self.onlySelected = [];
     self.exceptions = [
       '/login'
     ].concat(options.addExceptions || []);
     self.expressMiddleware = function(req, res, next) {
       const url = req.url.replace(/\?.*$/, '');
-      const includeList = req.data.global.pagelist;
-      self.included = includeList.map( function(obj) { return obj.page; } );
+      const onlySelected = req.data.global.maintenanceOnlySelected;
 
-      if(includeList.length){
-        console.log(_.includes(includeList.page, url));
-        
-        if (_.includes(self.included, url)){
-          if (self.apos.permissions.can(req, 'admin')) {
-            return next();
-          }else{
-            return res.status(503).send(self.render(req, 'message', {
-                title: req.data.global.maintenanceTitle,
-              message: req.data.global.maintenanceMessage
-              }));
-            }
-          }else {
-            return next();
-          }
-      }else {
-          if (_.includes(self.exceptions, url)) {
-            return next();
-          }
-          if (req.method !== 'GET') {
-            return next();
-          }
-          if (!req.data.global) {
-            // We cannot make a determination. global module should load first though
-            return next();
-          }
-          if (!req.data.global.maintenanceMode) {
-            return next();
-          }
-          if (self.apos.permissions.can(req, 'admin')) {
-            return next();
-          }
-           return res.status(503).send(self.render(req, 'message', {
-            title: req.data.global.maintenanceTitle,
-          message: req.data.global.maintenanceMessage
-          }));
+      if (onlySelected){
+        self.onlySelected = onlySelected.map( function(obj) { return obj.page; } );
       }
+
+      if (_.includes(self.exceptions, url)) {
+        return next();
+      }
+      if (req.method !== 'GET') {
+        return next();
+      }
+      if (!req.data.global) {
+        // We cannot make a determination. global module should load first though
+        return next();
+      }
+      if (!req.data.global.maintenanceMode) {
+        return next();
+      }else {
+        if (self.onlySelected.length && _.includes(self.onlySelected, url)) {
+          return res.status(503).send(self.render(req, 'message', {
+            title: req.data.global.maintenanceTitle,
+            message: req.data.global.maintenanceMessage
+          }));
+        }else {
+          return next();
+        }
+      }
+      if (self.apos.permissions.can(req, 'admin')) {
+        return next();
+      }
+      return res.status(503).send(self.render(req, 'message', {
+        title: req.data.global.maintenanceTitle,
+        message: req.data.global.maintenanceMessage
+      }));
         // 503 status code, most suitable for SEO
         // during maintenance mode per https://yoast.com/http-503-site-maintenance-seo/
        
