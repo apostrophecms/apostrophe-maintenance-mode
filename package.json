@@ -1,6 +1,6 @@
 {
   "name": "apostrophe-maintenance-mode",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Put an ApostropheCMS site in maintenance mode, displaying a maintenance message to everyone except full site admins until it is turned off again.",
   "main": "index.js",
   "scripts": {
